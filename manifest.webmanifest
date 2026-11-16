@@ -1,0 +1,9 @@
+{
+  "name": "Aayan Sirak Gadda Pasal – Manager",
+  "short_name": "Aayan Shop",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f6fb",
+  "theme_color": "#172554",
+  "description": "Offline bedding shop manager"
+}

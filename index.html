@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172554"><title>Aayan Sirak Gadda Pasal – Manager</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--navy:#172554;--blue:#2563eb;--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#172554,#1d4ed8);color:white;padding:18px 16px 16px;position:sticky;top:0;z-index:5;box-shadow:0 3px 12px #0f172a22}
+header h1{font-size:19px;margin:0 0 4px}header small{opacity:.85}
+nav{display:flex;gap:7px;overflow:auto;padding:10px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:76px;z-index:4}
+nav button{white-space:nowrap;border:0;border-radius:10px;background:#eef2ff;color:#1e3a8a;padding:10px 13px;font-weight:650}
+nav button.active{background:var(--navy);color:white}
+main{max-width:1050px;margin:auto;padding:14px}
+.page{display:none}.page.active{display:block}
+h2{font-size:20px;margin:5px 0 14px}h3{font-size:16px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 2px 7px #0f172a08;margin-bottom:12px}
+.stat .k{color:var(--muted);font-size:12px}.stat .v{font-size:21px;font-weight:750;margin-top:5px;overflow-wrap:anywhere}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:700;background:var(--blue);color:white;cursor:pointer}.btn.secondary{background:#e2e8f0;color:#1e293b}.btn.danger{background:#fee2e2;color:#991b1b}.btn.green{background:#15803d}.btn.small{padding:7px 10px;font-size:13px}
+label{display:block;font-size:13px;color:#475569;font-weight:650;margin:9px 0 5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;background:white;font:inherit;color:var(--ink)}
+textarea{min-height:65px} .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:#475569;background:#f8fafc}
+.tablewrap{overflow:auto}.muted{color:var(--muted)}.pill{display:inline-block;padding:3px 8px;border-radius:20px;background:#e0e7ff;color:#1e40af;font-size:12px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}.notice{padding:11px;border-radius:10px;background:#eff6ff;color:#1e40af;font-size:13px;margin-bottom:12px}
+.hidden{display:none!important}.itemline{display:grid;grid-template-columns:2fr .7fr .9fr auto;gap:7px;align-items:end;margin:8px 0}.itemline label{margin-top:0}.right{text-align:right}.positive{color:var(--green)}.negative{color:var(--red)}
+#lockscreen{position:fixed;inset:0;background:#0f172a;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}
+#lockscreen .card{width:min(390px,100%);padding:22px}#lockscreen h2{color:var(--navy)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:520px){header{padding:14px}nav{top:68px}main{padding:10px}.itemline{grid-template-columns:1fr 1fr}.itemline .full{grid-column:1/-1}}
+</style></head>
+<body>
+<div id="lockscreen"><div class="card"><h2>Aayan Sirak Gadda Pasal</h2><p class="muted">Enter the shared app password.</p><label>Password</label><input id="passInput" type="password" inputmode="numeric" placeholder="Enter password"><p id="lockError" class="negative"></p><button class="btn" style="width:100%" onclick="unlock()">Open app</button><p class="muted" style="font-size:12px">First-time password: <b>1234</b>. Change it in Settings.</p></div></div>
+<header><h1>Aayan Sirak Gadda Pasal – Manager</h1><small>Offline shop records · NPR (Rs.)</small></header>
+<nav id="nav">
+<button data-page="home" class="active">Home</button><button data-page="sales">Sales</button><button data-page="expenses">Expenses</button><button data-page="khata">Daily Khata</button><button data-page="products">Products</button><button data-page="reports">Reports</button><button data-page="settings">Settings</button>
+</nav>
+<main>
+<section id="home" class="page active">
+<h2>Dashboard</h2><div class="grid" id="stats"></div>
+<div class="card"><h3>Quick actions</h3><div class="actions"><button class="btn" onclick="go('sales')">＋ New Sale</button><button class="btn green" onclick="go('expenses')">＋ Add Expense</button><button class="btn secondary" onclick="go('khata')">Daily Khata</button></div></div>
+<div class="card"><h3>Today's activity</h3><div id="todayActivity" class="muted">No entries yet.</div></div>
+</section>
+<section id="sales" class="page">
+<h2>Record a sale</h2><div class="card">
+<div class="row"><div><label>Date</label><input type="date" id="saleDate"></div><div><label>Recorded by</label><select id="saleMember"></select></div></div>
+<div class="row"><div><label>Customer name (optional)</label><input id="customer" placeholder="Customer name"></div><div><label>Phone (optional)</label><input id="phone" placeholder="Phone number"></div></div>
+<label>Items in this sale</label><div id="saleLines"></div><button class="btn secondary small" onclick="addSaleLine()">＋ Add item</button>
+<div class="row"><div><label>Combined total selling price (Rs.)</label><input id="saleTotal" type="number" min="0" step="0.01" placeholder="Final amount customer pays"></div><div><label>Total purchase cost (optional manual override)</label><input id="saleCost" type="number" min="0" step="0.01" placeholder="Leave blank to use product costs"></div></div>
+<div class="row"><div><label>Cash received (Rs.)</label><input id="saleCash" type="number" min="0" step="0.01" value="0"></div><div><label>QR received (Rs.)</label><input id="saleQr" type="number" min="0" step="0.01" value="0"></div></div>
+<p class="muted" id="saleCostHint">Purchase cost will be estimated from saved product costs.</p>
+<label>Notes (optional)</label><textarea id="saleNotes"></textarea><div class="actions" style="margin-top:12px"><button class="btn" onclick="saveSale()">Save sale</button><button class="btn secondary" onclick="resetSale()">Clear</button></div>
+</div><div class="card"><h3>Sales list</h3><div class="tablewrap" id="salesList"></div></div>
+</section>
+<section id="expenses" class="page">
+<h2>Record an expense</h2><div class="card">
+<div class="row"><div><label>Date</label><input type="date" id="expDate"></div><div><label>Recorded by</label><select id="expMember"></select></div></div>
+<div class="row"><div><label>Category</label><select id="expCategory"><option>Transport</option><option>Shop supplies</option><option>Delivery</option><option>Food</option><option>Other</option></select></div><div><label>Description</label><input id="expDesc" placeholder="What was paid for?"></div></div>
+<div class="row"><div><label>Cash / Galla paid (Rs.)</label><input id="expCash" type="number" min="0" value="0"></div><div><label>QR / Bank paid (Rs.)</label><input id="expQr" type="number" min="0" value="0"></div></div>
+<button class="btn" style="margin-top:12px" onclick="saveExpense()">Save expense</button>
+</div><div class="card"><h3>Expenses list</h3><div id="expensesList" class="tablewrap"></div></div>
+</section>
+<section id="khata" class="page">
+<h2>Daily Khata</h2><div class="card"><div class="row"><div><label>Select date</label><input type="date" id="khataDate" onchange="renderKhata()"></div><div><label>Opening cash (physical cash incl. galla)</label><input id="openingCash" type="number" min="0" onchange="saveKhataFields()"></div></div>
+<div class="row"><div><label>Money kept in galla for change (closing)</label><input id="gallaKeep" type="number" min="0" onchange="saveKhataFields()"></div><div><label>Actual physical cash counted at closing</label><input id="actualCash" type="number" min="0" onchange="saveKhataFields()" placeholder="Enter counted cash"></div></div>
+<div id="khataSummary"></div></div>
+<div class="card"><h3>Entries for selected date</h3><div id="khataEntries"></div></div>
+</section>
+<section id="products" class="page">
+<h2>Product catalogue</h2><div class="card"><input type="hidden" id="productEditId">
+<div class="row"><div><label>Product name *</label><input id="pName" placeholder="Gadda"></div><div><label>Category</label><input id="pCategory" placeholder="Mattress"></div></div>
+<div class="row"><div><label>Variation</label><input id="pVariation" placeholder="Gadda / Mattress"></div><div><label>Size</label><input id="pSize" placeholder="4*6"></div></div>
+<div class="row"><div><label>Weight</label><input id="pWeight" placeholder="12-14"></div><div><label>Material / quality</label><input id="pMaterial" placeholder="Cotton"></div></div>
+<div class="row"><div><label>Purchase cost per piece (Rs.)</label><input id="pCost" type="number" min="0"></div><div><label>Suggested selling price (Rs.)</label><input id="pPrice" type="number" min="0"></div></div>
+<label>Notes</label><input id="pNotes"><div class="actions" style="margin-top:12px"><button class="btn" onclick="saveProduct()">Save product</button><button class="btn secondary" onclick="clearProduct()">Clear</button></div>
+</div><div class="card"><h3>Products</h3><div class="tablewrap" id="productsList"></div></div>
+</section>
+<section id="reports" class="page"><h2>Reports</h2><div class="card"><div class="row"><div><label>From date</label><input type="date" id="reportFrom"></div><div><label>To date</label><input type="date" id="reportTo"></div></div><button class="btn" onclick="renderReports()" style="margin-top:10px">Show report</button><div id="reportOutput" style="margin-top:14px"></div><hr><div class="actions"><button class="btn secondary" onclick="exportCSV()">Export Excel-compatible CSV</button><button class="btn secondary" onclick="window.print()">Print / Save PDF</button></div><p class="muted" style="font-size:12px">CSV opens in Excel. For PDF, choose “Save as PDF” in your phone's print options.</p></div></section>
+<section id="settings" class="page"><h2>Settings & backup</h2><div class="card"><h3>Family member names</h3><div class="row"><div><label>Add a member</label><input id="newMember" placeholder="Member name"></div><div style="align-self:end"><button class="btn" onclick="addMember()">Add name</button></div></div><div id="memberList"></div></div>
+<div class="card"><h3>Change common password</h3><label>Current password</label><input id="oldPass" type="password"><label>New password</label><input id="newPass" type="password"><button class="btn" onclick="changePassword()" style="margin-top:10px">Change password</button><p id="passMsg" class="muted"></p></div>
+<div class="card"><h3>Backup & restore</h3><p class="muted">Save a backup file regularly. Keep it somewhere safe. This offline app does not sync data to other phones.</p><div class="actions"><button class="btn" onclick="backupData()">Download backup</button><label class="btn secondary" style="margin:0">Restore backup<input type="file" accept="application/json" onchange="restoreData(event)" hidden></label></div></div>
+<div class="card"><h3>Data note</h3><p class="muted">Your records are stored in this browser on this device. Clearing browser data or uninstalling the app can remove them. Download backups regularly.</p></div></section>
+</main><footer>Offline-first shop manager · Data stays on this device</footer>
+<script>
+const KEY='aayan_shop_offline_v3';
+const today=()=>new Date().toLocaleDateString('en-CA');
+let db=load();
+function fresh(){return {password:'1234',members:['Owner','Member 2','Member 3','Member 4'],products:[],sales:[],expenses:[],khatas:{}}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(db))}
+function money(n){return 'Rs. '+(Number(n)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));renderAll();window.scrollTo(0,0)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function unlock(){if(document.getElementById('passInput').value===db.password){document.getElementById('lockscreen').classList.add('hidden');persist();renderAll()}else document.getElementById('lockError').textContent='Incorrect password. Try again.'}
+document.getElementById('passInput').addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});
+function setOptions(id){document.getElementById(id).innerHTML=db.members.map(m=>`<option>${esc(m)}</option>`).join('')}
+function renderAll(){['saleMember','expMember'].forEach(setOptions);renderHome();renderSales();renderExpenses();renderProducts();renderKhata();renderMembers();renderReports();if(!document.getElementById('saleDate').value)document.getElementById('saleDate').value=today();if(!document.getElementById('expDate').value)document.getElementById('expDate').value=today();if(!document.getElementById('khataDate').value)document.getElementById('khataDate').value=today();if(!document.getElementById('reportFrom').value){document.getElementById('reportFrom').value=today().slice(0,8)+'01';document.getElementById('reportTo').value=today()}}
+function daySales(d){return db.sales.filter(x=>x.date===d)}function dayExpenses(d){return db.expenses.filter(x=>x.date===d)}
+function sum(a,k){return a.reduce((s,x)=>s+(Number(x[k])||0),0)}
+function renderHome(){let d=today(),s=daySales(d),e=dayExpenses(d),sales=sum(s,'total'),cash=sum(s,'cash'),qr=sum(s,'qr'),cost=sum(s,'cost'),ex=sum(e,'total'),profit=sales-cost;let k=db.khatas[d]||{};let vals=[['Today sales',money(sales)],['Cash received',money(cash)],['QR received',money(qr)],['Expenses',money(ex)],['Gross profit',money(profit)],['Galla kept',money(k.galla||0)]];document.getElementById('stats').innerHTML=vals.map(([a,b])=>`<div class="card stat"><div class="k">${a}</div><div class="v">${b}</div></div>`).join('');document.getElementById('todayActivity').innerHTML=`${s.length} sale(s) · ${e.length} expense(s) · ${db.products.length} products`;}
+function productLabel(p){return `${p.name}${p.variation?' · '+p.variation:''}${p.category?' · '+p.category:''}${p.size?' · '+p.size:''}${p.weight?' · Weight '+p.weight:''}${p.material?' · '+p.material:''}`}
+function addSaleLine(){let div=document.createElement('div');div.className='itemline';div.innerHTML=`<div class="full"><label>Product</label><select class="lineProduct"><option value="">Select product</option>${db.products.map(p=>`<option value="${p.id}">${esc(productLabel(p))}</option>`).join('')}</select></div><div><label>Qty</label><input class="lineQty" type="number" min="1" value="1"></div><div><label>Cost/piece</label><input class="lineCost" type="number" min="0" value="0"></div><button class="btn danger small" onclick="this.parentElement.remove()">×</button>`;document.getElementById('saleLines').appendChild(div)}
+function resetSale(){['customer','phone','saleTotal','saleCost','saleNotes'].forEach(x=>document.getElementById(x).value='');document.getElementById('saleCash').value=0;document.getElementById('saleQr').value=0;document.getElementById('saleLines').innerHTML='';addSaleLine()}
+function saveSale(){let lines=[...document.querySelectorAll('.itemline')].map(x=>{let p=db.products.find(p=>p.id===x.querySelector('.lineProduct').value);return p?{productId:p.id,name:p.name,variation:p.variation,size:p.size,weight:p.weight,material:p.material,qty:Number(x.querySelector('.lineQty').value)||1,cost:Number(x.querySelector('.lineCost').value)||Number(p.cost)||0}:null}).filter(Boolean);let total=Number(saleTotal.value),cash=Number(saleCash.value)||0,qr=Number(saleQr.value)||0;if(!lines.length||!(total>=0)||Math.abs(cash+qr-total)>.01){alert('Select at least one product and make sure Cash + QR equals the final sale amount.');return}let auto=lines.reduce((a,x)=>a+x.qty*x.cost,0),cost=saleCost.value.trim()===''?auto:Number(saleCost.value);db.sales.push({id:id(),date:saleDate.value||today(),member:saleMember.value,customer:customer.value,phone:phone.value,lines,total,cash,qr,cost,notes:saleNotes.value,created:Date.now()});persist();resetSale();renderAll();alert('Sale saved.')}
+function renderSales(){let a=[...db.sales].sort((x,y)=>y.date.localeCompare(x.date));salesList.innerHTML=a.length?`<table><tr><th>Date / By</th><th>Items</th><th>Total</th><th>Cash / QR</th><th>Profit</th><th></th></tr>${a.map(x=>`<tr><td>${x.date}<br><span class="muted">${esc(x.member)}</span></td><td>${x.lines.map(l=>esc(l.name)+' × '+l.qty).join('<br>')}</td><td>${money(x.total)}</td><td>${money(x.cash)} / ${money(x.qr)}</td><td>${money(x.total-x.cost)}</td><td><button class="btn danger small" onclick="delEntry('sales','${x.id}')">Delete</button></td></tr>`).join('')}</table>`:'No sales recorded.'}
+function saveExpense(){let cash=Number(expCash.value)||0,qr=Number(expQr.value)||0;if(cash+qr<=0){alert('Enter an expense amount.');return}db.expenses.push({id:id(),date:expDate.value||today(),member:expMember.value,category:expCategory.value,description:expDesc.value,total:cash+qr,cash,qr});persist();expDesc.value='';expCash.value=0;expQr.value=0;renderAll();alert('Expense saved.')}
+function renderExpenses(){let a=[...db.expenses].sort((x,y)=>y.date.localeCompare(x.date));expensesList.innerHTML=a.length?`<table><tr><th>Date / By</th><th>Description</th><th>Cash / QR</th><th>Total</th><th></th></tr>${a.map(x=>`<tr><td>${x.date}<br>${esc(x.member)}</td><td>${esc(x.category)}<br>${esc(x.description)}</td><td>${money(x.cash)} / ${money(x.qr)}</td><td>${money(x.total)}</td><td><button class="btn danger small" onclick="delEntry('expenses','${x.id}')">Delete</button></td></tr>`).join('')}</table>`:'No expenses recorded.'}
+function delEntry(type,key){if(confirm('Delete this entry?')){db[type]=db[type].filter(x=>x.id!==key);persist();renderAll()}}
+function saveProduct(){let name=pName.value.trim();if(!name){alert('Product name is required.');return}let obj={id:productEditId.value||id(),name,category:pCategory.value,variation:pVariation.value,size:pSize.value,weight:pWeight.value,material:pMaterial.value,cost:Number(pCost.value)||0,price:Number(pPrice.value)||0,notes:pNotes.value};let i=db.products.findIndex(x=>x.id===obj.id);if(i>=0)db.products[i]=obj;else db.products.push(obj);persist();clearProduct();renderAll()}
+function clearProduct(){['productEditId','pName','pCategory','pVariation','pSize','pWeight','pMaterial','pCost','pPrice','pNotes'].forEach(x=>document.getElementById(x).value='')}
+function editProduct(key){let p=db.products.find(x=>x.id===key);if(!p)return;productEditId.value=p.id;pName.value=p.name;pCategory.value=p.category;pVariation.value=p.variation;pSize.value=p.size;pWeight.value=p.weight;pMaterial.value=p.material;pCost.value=p.cost;pPrice.value=p.price;pNotes.value=p.notes;window.scrollTo(0,0)}
+function renderProducts(){productsList.innerHTML=db.products.length?`<table><tr><th>Product details</th><th>Cost</th><th>Suggested price</th><th></th></tr>${db.products.map(p=>`<tr><td><b>${esc(p.name)}</b><br>${esc(productLabel(p))}</td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td><button class="btn secondary small" onclick="editProduct('${p.id}')">Edit</button> <button class="btn danger small" onclick="delEntry('products','${p.id}')">Delete</button></td></tr>`).join('')}</table>`:'No products yet. Add products above.'}
+function renderKhata(){let d=khataDate.value||today(),k=db.khatas[d]||{};openingCash.value=k.opening??'';gallaKeep.value=k.galla??'';actualCash.value=k.actual??'';let s=daySales(d),e=dayExpenses(d),sales=sum(s,'total'),cash=sum(s,'cash'),qr=sum(s,'qr'),ex=sum(e,'total'),cost=sum(s,'cost'),gross=sales-cost;let calc=cash+qr+ex-sales-(Number(k.galla)||0),actual=k.actual===''||k.actual===undefined?null:Number(k.actual),diff=actual===null?null:actual-calc;
+khataSummary.innerHTML=`<div class="grid"><div class="stat"><div class="k">Total selling</div><div class="v">${money(sales)}</div></div><div class="stat"><div class="k">Purchase cost</div><div class="v">${money(cost)}</div></div><div class="stat"><div class="k">Gross profit</div><div class="v">${money(gross)}</div></div><div class="stat"><div class="k">Cash received</div><div class="v">${money(cash)}</div></div><div class="stat"><div class="k">QR received</div><div class="v">${money(qr)}</div></div><div class="stat"><div class="k">Expenses (added as requested)</div><div class="v">${money(ex)}</div></div></div><hr><p><b>Your daily calculation:</b><br>Cash from sales + QR amount + expenses − total sales − galla for change</p><h2>${money(calc)}</h2><p class="muted">Calculated closing figure</p><p><b>Actual cash counted:</b> ${actual===null?'Not entered':money(actual)}</p><p><b>Difference (actual − calculated):</b> ${diff===null?'Not available':`<span class="${diff===0?'positive':'negative'}">${money(diff)}</span>`}</p>`;
+khataEntries.innerHTML=`<b>Sales (${s.length})</b><ul>${s.map(x=>`<li>${esc(x.lines.map(l=>l.name+' × '+l.qty).join(', '))} — ${money(x.total)} <span class="muted">(${esc(x.member)})</span></li>`).join('')||'<li>None</li>'}</ul><b>Expenses (${e.length})</b><ul>${e.map(x=>`<li>${esc(x.category)} ${esc(x.description)} — ${money(x.total)} <span class="muted">(${esc(x.member)})</span></li>`).join('')||'<li>None</li>'}</ul>`}
+function saveKhataFields(){let d=khataDate.value||today();db.khatas[d]={...(db.khatas[d]||{}),opening:openingCash.value===''?'':Number(openingCash.value),galla:gallaKeep.value===''?0:Number(gallaKeep.value),actual:actualCash.value===''?'':Number(actualCash.value)};persist();renderKhata();renderHome()}
+function renderMembers(){memberList.innerHTML=db.members.map((m,i)=>`<p>${esc(m)} ${i>0?`<button class="btn danger small" onclick="removeMember(${i})">Remove</button>`:''}</p>`).join('')}
+function addMember(){let n=newMember.value.trim();if(n&&!db.members.includes(n)){db.members.push(n);newMember.value='';persist();renderAll()}}
+function removeMember(i){if(confirm('Remove this name from the list? Past entries keep their saved name.')){db.members.splice(i,1);persist();renderAll()}}
+function changePassword(){if(oldPass.value!==db.password){passMsg.textContent='Current password is incorrect.';return}if(newPass.value.length<4){passMsg.textContent='Use at least 4 characters.';return}db.password=newPass.value;persist();oldPass.value='';newPass.value='';passMsg.textContent='Password changed.'}
+function backupData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Aayan-Shop-Backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function restoreData(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.products||!x.sales||!x.expenses||!x.members)throw 0;if(confirm('Replace current device data with this backup?')){db=x;persist();renderAll();alert('Backup restored.')}}catch(e){alert('Invalid backup file.')}};r.readAsText(f)}
+function renderReports(){let from=reportFrom.value||'0000',to=reportTo.value||'9999',s=db.sales.filter(x=>x.date>=from&&x.date<=to),e=db.expenses.filter(x=>x.date>=from&&x.date<=to),sales=sum(s,'total'),cost=sum(s,'cost'),cash=sum(s,'cash'),qr=sum(s,'qr'),ex=sum(e,'total'),counts={};s.forEach(x=>x.lines.forEach(l=>counts[l.name]=(counts[l.name]||0)+l.qty));let best=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);reportOutput.innerHTML=`<div class="grid">${[['Total sales',sales],['Purchase costs',cost],['Gross profit',sales-cost],['Cash received',cash],['QR received',qr],['Expenses',ex],['Net profit (gross − expenses)',sales-cost-ex]].map(([a,b])=>`<div class="card stat"><div class="k">${a}</div><div class="v">${money(b)}</div></div>`).join('')}</div><h3>Best-selling products</h3>${best.length?best.map(([n,q])=>`<p>${esc(n)} — ${q} pieces</p>`).join(''):'No sales in this period.'}`}
+function exportCSV(){let rows=[['Type','Date','Recorded by','Details','Total Rs','Cash Rs','QR Rs','Purchase cost Rs','Profit Rs']];db.sales.forEach(x=>rows.push(['Sale',x.date,x.member,x.lines.map(l=>l.name+' x '+l.qty).join('; '),x.total,x.cash,x.qr,x.cost,x.total-x.cost]));db.expenses.forEach(x=>rows.push(['Expense',x.date,x.member,x.category+' '+x.description,x.total,x.cash,x.qr,0,0]));let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='Aayan-Shop-Transactions.csv';a.click();URL.revokeObjectURL(a.href)}
+// Init controls and defaults
+saleDate.value=today();expDate.value=today();khataDate.value=today();reportFrom.value=today().slice(0,8)+'01';reportTo.value=today();addSaleLine();renderAll();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
